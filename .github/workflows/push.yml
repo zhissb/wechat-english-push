@@ -1,0 +1,28 @@
+name: WeChat English Push
+
+on:
+  schedule:
+    - cron: "30 23 * * *"  # UTC 23:30 = 北京时间 07:30
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run push script
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          OPENID: ${{ secrets.OPENID }}
+        run: python push.py
